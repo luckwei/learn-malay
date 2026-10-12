@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f2">
+  <meta name="description" content="A calmer way to learn Malay. Start with a handful of words, connect them into sentences, and grow one pattern at a time.">
+  <title>Rangkai — Learn Malay, piece by piece</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15"/></symbol>
+    <symbol id="i-path" viewBox="0 0 24 24"><circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 5h9a4 4 0 0 1 0 8H8a3 3 0 0 0 0 6h9"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M20 7H7a4 4 0 0 0-4 4m17-4-4-4m4 4-4 4M4 17h13a4 4 0 0 0 4-4M4 17l4 4m-4-4 4-4"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></symbol>
+  </defs></svg>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#practice" aria-label="Rangkai home"><span class="brand-mark"><span></span><span></span><span></span></span>rangkai<span class="brand-dot">.</span></a>
+      <div class="language-pill"><span class="flag" aria-hidden="true">MY</span> Malay <span class="language-detail">for beginners</span></div>
+      <div class="nav-label">YOUR WORKSPACE</div>
+      <nav aria-label="Main navigation">
+        <a href="#practice" class="nav-item" data-page="practice"><svg><use href="#i-spark"/></svg>Practice<span class="nav-dot"></span></a>
+        <a href="#blocks" class="nav-item" data-page="blocks"><svg><use href="#i-grid"/></svg>Building blocks</a>
+        <a href="#path" class="nav-item" data-page="path"><svg><use href="#i-path"/></svg>Learning path</a>
+      </nav>
+      <div class="sidebar-note"><div class="note-illustration" aria-hidden="true"><span>saya</span><span>+</span><span>makan</span></div><h3>A little, connected.</h3><p>Small word pools.<br>Lots of little discoveries.</p><button class="text-button" id="how-button">How learning works <span>↗</span></button></div>
+      <div class="sidebar-bottom"><span class="avatar">Y</span><div>You, at your own pace<small>Progress saved on this device</small></div></div>
+    </aside>
+    <main>
+      <header class="topbar"><span><span class="status-dot"></span> YOUR MALAY JOURNEY</span><button class="prototype-badge" id="prototype-button">Interactive prototype <svg><use href="#i-info"/></svg></button></header>
+      <div id="page-content"></div>
+      <footer><span>One small connection at a time.</span><span>Made for curious minds <span class="footer-flower">✳</span></span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <dialog id="detail-dialog"><div class="dialog-header"><span class="eyebrow" id="dialog-eyebrow">A CLOSER LOOK</span><button class="icon-button" id="close-dialog" aria-label="Close dialog"><svg><use href="#i-close"/></svg></button></div><div id="dialog-content"></div></dialog>
+</body>
+</html>
