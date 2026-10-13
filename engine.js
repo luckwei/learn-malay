@@ -407,7 +407,7 @@ export function validateState(input) {
   )
     throw new Error("Invalid review history.");
   const legacy = input.legacy ? validateLegacy(input.legacy) : null;
-  return {
+  return restoreLegacyAccess({
     version: 2,
     createdAt: input.createdAt,
     updatedAt: input.updatedAt,
@@ -428,7 +428,7 @@ export function validateState(input) {
       at: h.at,
     })),
     legacy,
-  };
+  });
 }
 export function validateLegacy(old) {
   if (
@@ -453,16 +453,32 @@ export function migrateLegacy(old, now = Date.now()) {
   const legacy = validateLegacy(old),
     state = freshState(now);
   state.legacy = legacy;
+  return restoreLegacyAccess(state);
+}
+function restoreLegacyAccess(state) {
+  const legacy = state.legacy;
+  if (!legacy) return state;
+  let unlocked = 0;
+  while (
+    unlocked < 3 &&
+    Array.from({ length: 5 }, (_, i) => `${unlocked}-${i}`).every((id) =>
+      legacy.confident.includes(id),
+    )
+  ) unlocked++;
+  // The last selected chapter can be earlier than the highest unlocked one.
+  unlocked = Math.max(unlocked, legacy.stage);
   // Preserve prior access and self-ratings, but do not invent per-word mastery.
-  if (legacy.stage >= 1) {
+  if (unlocked >= 1) {
     state.unlocked.push("ongoing");
     state.introduced.push(wordId("sedang"));
   }
-  if (legacy.stage >= 2) {
+  if (unlocked >= 2) {
     state.unlocked.push("forms");
     state.introduced.push(...["membaca", "menulis", "membeli"].map(wordId));
   }
-  if (legacy.stage >= 3) state.introduced.push(...["roti", "teh"].map(wordId));
+  if (unlocked >= 3) state.introduced.push(...["roti", "teh"].map(wordId));
+  state.introduced = [...new Set(state.introduced)];
+  state.unlocked = [...new Set(state.unlocked)];
   return state;
 }
 

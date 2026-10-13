@@ -103,6 +103,22 @@ test("FSRS keeps recognition, recall, derived forms, and grammar independent", (
   );
   assert.deepEqual(validateState(state), state);
 });
+
+test("repair an already-migrated snapshot's legacy access without altering its reviews", () => {
+  const state = freshState(NOW);
+  state.legacy = {
+    stage: 0,
+    confident: Array.from({ length: 20 }, (_, i) => `${Math.floor(i / 5)}-${i % 5}`),
+    review: [],
+  };
+  review(state, "word", "ms:saya", "recognition", 3, NOW);
+  const repaired = validateState(state);
+  assert.equal(repaired.introduced.length, 20);
+  assert.ok(repaired.unlocked.includes("forms"));
+  assert.deepEqual(repaired.records, state.records);
+  assert.equal(repaired.reviews, 1);
+  assert.deepEqual(validateState(repaired), repaired);
+});
 test("due reviews take priority; future reviews are not treated as due", () => {
   const state = freshState(NOW);
   review(state, "word", "ms:saya", "recognition", 1, NOW);
@@ -194,4 +210,18 @@ test("migrate old sentence progress without manufacturing word recall", () => {
     () => migrateLegacy({ stage: 3, confident: ["bad"], review: [] }),
     /Invalid earlier/,
   );
+});
+
+test("legacy unlocks survive revisiting an earlier chapter", () => {
+  const old = {
+    stage: 0,
+    confident: Array.from({ length: 20 }, (_, i) => `${Math.floor(i / 5)}-${i % 5}`),
+    review: [],
+  };
+  const state = migrateLegacy(old, NOW);
+  assert.equal(state.introduced.length, 20);
+  assert.deepEqual(state.unlocked, ["basic", "ongoing", "forms"]);
+  assert.equal(state.reviews, 0);
+  assert.deepEqual(state.records, {});
+  assert.deepEqual(validateState(state), state);
 });
